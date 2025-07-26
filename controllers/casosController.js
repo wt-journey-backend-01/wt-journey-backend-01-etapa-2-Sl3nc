@@ -2,7 +2,7 @@ const casosRepository = require("../repositories/casosRepository")
 
 function getAllCasos(req, res) {
     const casos = casosRepository.findAll()
-    res.json(casos)
+    res.status(200).json(casos)
 }
 
 function getCasosByID(req, res) {
@@ -13,7 +13,7 @@ function getCasosByID(req, res) {
         }
 
         const caso = casosRepository.findBy(id)
-        res.json(caso)
+        res.status(200).json(caso)
     }
     catch (error){
         res.status(404).send(error.message)
@@ -29,7 +29,7 @@ function postCaso(req, res) {
         }
 
         const result = casosRepository.add(jsonData)
-        res.status(201).send(`Dados adcionados com sucesso, ${result} casos registrados`)
+        res.status(201).json(result)
     }
     catch (error) {
         res.status(404).send(error.message)
@@ -49,7 +49,7 @@ function putAllCaso(req, res) {
         }
 
         const result = casosRepository.updtAll(id, jsonData)
-        res.send(`Dados atualizados com sucesso, ${result} casos registrados`)
+        res.status(200).json(result)
     }
     catch (error) {
         res.status(404).send(error.message)
@@ -69,7 +69,7 @@ function patchPartialCaso(req, res) {
         }
 
         const result = casosRepository.updtPartial(id, jsonData)
-        res.send(`Dados atualizados com sucesso, ${result} casos registrados`)
+        res.status(200).json(result)
     }
     catch (error) {
         res.status(404).send(error.message)
@@ -83,8 +83,8 @@ function deleteCaso(req, res) {
             res.status(400).send('O campo "id" é obrigatório')
         }
 
-        const result = casosRepository.deleteBy(id)
-        res.send(`Dados removidos com sucesso, ${result} casos registrados`)
+        casosRepository.deleteBy(id)
+        res.status(204).send()
     }
     catch (error) {
         res.status(404).send(error.message)

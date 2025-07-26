@@ -26,7 +26,8 @@ function findBy(id) {
 function add(data) {
     validJSON(data);
     data['id'] = uuidv4()
-    return casos.push(data)
+    casos.push(data)
+    return(data)
 }
 
 function updtAll(id, data) {
@@ -40,7 +41,7 @@ function updtAll(id, data) {
 
     casos.splice(casos.indexOf(caso), 1)
     casos.push(data)
-    return casos.length
+    return data
 }
 
 function updtPartial(id, data) {
@@ -53,12 +54,11 @@ function updtPartial(id, data) {
 
     casos.splice(casos.indexOf(caso), 1)
     casos.push(caso)
-    return casos.length
+    return caso
 }
 
 function deleteBy(id) {
     casos.splice(casos.indexOf(findBy(id)), 1)
-    return casos.length
 }
 
 module.exports = {
@@ -102,5 +102,9 @@ function validJSON(data) {
 
     if (notFound.length != 0) {
         throw new ReferenceError(`Os seguintes campos estão faltando: ${notFound.join(', ')}`);
+    }
+    
+    if (data['status'] != 'aberto' && data['status'] != 'solucionado'){
+        throw new AggregateError('Valor inválido para o campo "status"');
     }
 }
