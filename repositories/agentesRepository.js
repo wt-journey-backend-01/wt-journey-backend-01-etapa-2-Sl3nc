@@ -23,7 +23,7 @@ function findBy(id) {
 }
 
 function add(data) {
-    // validJSON(data);
+    validJSON(data);
     data['id'] = uuidv4()
     agentes.push(data)
     return (data)
@@ -103,8 +103,7 @@ function validJSON(data) {
         throw new ReferenceError(`Os seguintes campos estão faltando: ${notFound.join(', ')}`);
     }
 
-    const date = data['dataDeIncorporacao']
-    if (new Date(date).toLocaleDateString('pt-BR') != date) {
-        throw new AggregateError('Valor inválido para o campo "status"');
+    if (!/^\d{4}\/\d{2}\/\d{2}$/.test(data['dataDeIncorporacao'])) {
+        throw new ReferenceError('Data no formato inválido para o campo "dataDeIncorporacao"');
     }
 }

@@ -10,11 +10,13 @@ app.use(casosRouter);
 app.use(agentesRouter);
 
 app.post('/contato', (req, res) => {
-    try{
-        throw new Error("oi")
-    }
-    catch (error){
-        res.send(error.message)
+    const data = req.body
+
+    const date = data['dataDeIncorporacao']
+    res.json(/^\d{4}\/\d{2}\/\d{2}$/.test(date))
+
+    if (new Date(date).toLocaleDateString('pt-BR') != date) {
+        throw new AggregateError('Valor inválido para o campo "status"');
     }
 });
 

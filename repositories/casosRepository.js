@@ -105,6 +105,6 @@ function validJSON(data) {
     }
     
     if (data['status'] != 'aberto' && data['status'] != 'solucionado'){
-        throw new AggregateError('Valor inválido para o campo "status"');
+        throw new ReferenceError('Valor inválido para o campo "status"');
     }
 }
