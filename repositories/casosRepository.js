@@ -17,9 +17,7 @@ function findAll() {
 
 function findBy(id) {
     const caso = casos.find(( caso ) => caso.id == id)
-    if (!caso) {
-        throw new ReferenceError("Caso não encontrado")
-    }
+    if (!caso) throw new ReferenceError("Caso não encontrado")
     return caso
 }
 
@@ -35,9 +33,7 @@ function updtAll(id, data) {
     validJSON(data);
 
     data["id"] = id
-    if (data == caso) {
-        throw new Error("Sem valores a serem atualizados")
-    }
+    if (data == caso) throw new Error("Sem valores a serem atualizados")
 
     casos.splice(casos.indexOf(caso), 1)
     casos.push(data)
@@ -75,12 +71,8 @@ function validUpdatePartial(data, caso) {
     const updatedKeys = [];
 
     Object.keys(data).forEach(element => {
-        if (!caso[element]) {
-            notFound.push(element);
-        }
-        else if (data[element] != caso[element]) {
-            updatedKeys.push(element);
-        }
+        if (!caso[element]) notFound.push(element);
+        else if (data[element] != caso[element]) updatedKeys.push(element);
     });
 
     if (notFound.length != 0) {
@@ -95,9 +87,7 @@ function validUpdatePartial(data, caso) {
 function validJSON(data) {
     const notFound = [];
     keys.forEach(element => {
-        if (!data[element]) {
-            notFound.push(element);
-        }
+        if (!data[element]) notFound.push(element);
     });
 
     if (notFound.length != 0) {
