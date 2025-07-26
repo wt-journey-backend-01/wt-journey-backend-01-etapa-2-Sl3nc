@@ -15,8 +15,8 @@ function findAll() {
     return casos
 }
 
-function findBy(queryID) {
-    const caso = casos.find(({ id }) => queryID == id)
+function findBy(id) {
+    const caso = casos.find(( caso ) => caso.id == id)
     if (!caso) {
         throw new ReferenceError("Caso não encontrado")
     }
@@ -30,11 +30,34 @@ function add(data) {
 }
 
 function updtAll(id, data) {
-    const index = casos.indexOf(findBy(id))
+    const caso = findBy(id)
     validJSON(data);
 
-    casos.splice(index, 1)
-    casos.push({ ...data, "id": id })
+    data["id"] = id
+    if (data == caso) {
+        throw new Error("Sem valores a serem atualizados")
+    }
+
+    casos.splice(casos.indexOf(caso), 1)
+    casos.push(data)
+    return casos.length
+}
+
+function updtPartial(id, data) {
+    const caso = findBy(id)
+    const updatedKeys = validUpdatePartial(data, caso);
+
+    updatedKeys.forEach(key => {
+        caso[key] = data[key]
+    });
+
+    casos.splice(casos.indexOf(caso), 1)
+    casos.push(caso)
+    return casos.length
+}
+
+function deleteBy(id) {
+    casos.splice(casos.indexOf(findBy(id)), 1)
     return casos.length
 }
 
@@ -42,7 +65,31 @@ module.exports = {
     findAll,
     findBy,
     add,
-    updtAll
+    updtAll,
+    updtPartial,
+    deleteBy
+}
+
+function validUpdatePartial(data, caso) {
+    const notFound = [];
+    const updatedKeys = [];
+
+    Object.keys(data).forEach(element => {
+        if (!caso[element]) {
+            notFound.push(element);
+        }
+        else if (data[element] != caso[element]) {
+            updatedKeys.push(element);
+        }
+    });
+
+    if (notFound.length != 0) {
+        throw new ReferenceError(`Os seguintes campos não são usados: ${notFound.join(', ')}`);
+    }
+    if (updatedKeys.length == 0) {
+        throw new Error("Sem valores a serem atualizados");
+    }
+    return updatedKeys;
 }
 
 function validJSON(data) {
